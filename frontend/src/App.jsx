@@ -44,7 +44,14 @@ function App() {
                 <Navbar />
                 <div className="container">
                     <Routes>
-                        <Route path="/" element={<Stories />} />
+                        <Route 
+                            path="/" 
+                            element={
+                                <PrivateRoute>
+                                    <Stories />
+                                </PrivateRoute>
+                            } 
+                        />
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
                         <Route 
