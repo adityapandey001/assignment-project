@@ -4,7 +4,7 @@ This is a full-stack MERN application that scrapes the top 10 stories from Hacke
 
 ## Prerequisites
 - Node.js (v14 or higher)
-- Local MongoDB (running on port 27017)
+- MongoDB Atlas Account (or local MongoDB)
 
 ## Getting Started Locally
 
@@ -13,7 +13,7 @@ This is a full-stack MERN application that scrapes the top 10 stories from Hacke
 2. Install dependencies: `npm install`
 3. Configure environment variables in `backend/.env`:
    - `PORT=5000`
-   - `MONGODB_URI=mongodb://127.0.0.1:27017/mernnews` (or your local mongodb URL)
+   - `MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.xxxx.mongodb.net/mernnews?retryWrites=true&w=majority`
    - `JWT_SECRET=your_jwt_secret_key`
 4. Start the server: `npm start`
    *(The server will automatically scrape HN on startup and run hourly via cron).*
