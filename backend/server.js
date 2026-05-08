@@ -11,8 +11,17 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(cors());
+const corsOrigins = (process.env.CORS_ORIGIN || '')
+    .split(',')
+    .map(s => s.trim())
+    .filter(Boolean);
+app.use(cors(corsOrigins.length ? { origin: corsOrigins, credentials: true } : undefined));
 app.use(express.json());
+
+// Health check
+app.get('/health', (req, res) => {
+    res.status(200).json({ ok: true });
+});
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
@@ -40,13 +49,16 @@ app.listen(PORT, async () => {
         console.error('Initial scrape failed:', error.message);
     }
     
-    // Schedule scraper to run every hour
-    cron.schedule('0 * * * *', async () => {
-        console.log('Running scheduled scrape...');
-        try {
-            await scrapeHackerNews();
-        } catch (error) {
-            console.error('Scheduled scrape failed:', error.message);
-        }
-    });
+    // Schedule scraper to run every hour (optional; prefer an external scheduler in production)
+    const enableCron = String(process.env.ENABLE_CRON || '').toLowerCase() === 'true';
+    if (enableCron) {
+        cron.schedule('0 * * * *', async () => {
+            console.log('Running scheduled scrape...');
+            try {
+                await scrapeHackerNews();
+            } catch (error) {
+                console.error('Scheduled scrape failed:', error.message);
+            }
+        });
+    }
 });
